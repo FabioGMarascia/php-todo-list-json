@@ -9,6 +9,7 @@ createApp({
 			myIconStyle: `d-inline-block position-absolute end-0 mt-2 text-danger fs-3`,
 			taskDone: `text-success text-decoration-line-through`,
 			ongoingTask: `text-danger`,
+			apiUrl: "../list.php",
 		};
 	},
 	methods: {
@@ -37,7 +38,7 @@ createApp({
 	mounted() {
 		const options = {
 			method: "GET",
-			url: "../api.php",
+			url: this.apiUrl,
 		};
 
 		axios
