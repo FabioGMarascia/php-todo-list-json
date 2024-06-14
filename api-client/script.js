@@ -11,6 +11,7 @@ createApp({
 			ongoingTask: `text-danger`,
 			apiListUrl: "../list.php",
 			apiCreateUrl: "../create.php",
+			apiDeleteUrl: "../delete.php",
 			config: { headers: { "Content-Type": "multipart/form-data" } },
 		};
 	},
@@ -19,7 +20,6 @@ createApp({
 			if (!this.input == ``) {
 				const toDo = {
 					string: text,
-					done: false,
 				};
 
 				axios
@@ -35,7 +35,19 @@ createApp({
 			}
 		},
 		deleteItem(index) {
-			this.toDoList.splice(index, 1);
+			// this.toDoList.splice(index, 1);
+			const toDo = {
+				element: index,
+			};
+
+			axios
+				.post(this.apiDeleteUrl, toDo, this.config)
+				.then((response) => {
+					this.toDoList = response.data;
+				})
+				.catch((error) => {
+					console.error(error);
+				});
 		},
 		done(element) {
 			return element.done ? this.taskDone : this.ongoingTask;
