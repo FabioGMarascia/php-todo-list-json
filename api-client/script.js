@@ -12,6 +12,7 @@ createApp({
 			apiListUrl: "../list.php",
 			apiCreateUrl: "../create.php",
 			apiDeleteUrl: "../delete.php",
+			apiUpdateUrl: "../updateTask.php",
 			config: { headers: { "Content-Type": "multipart/form-data" } },
 		};
 	},
@@ -35,7 +36,6 @@ createApp({
 			}
 		},
 		deleteItem(index) {
-			// this.toDoList.splice(index, 1);
 			const toDo = {
 				element: index,
 			};
@@ -52,8 +52,20 @@ createApp({
 		done(element) {
 			return element.done ? this.taskDone : this.ongoingTask;
 		},
-		changeToDo(element) {
-			element.done ? (element.done = false) : (element.done = true);
+		changeToDo(element, index) {
+			// element.done ? (element.done = false) : (element.done = true);
+			const toDo = {
+				element: index,
+			};
+
+			axios
+				.post(this.apiUpdateUrl, toDo, this.config)
+				.then((response) => {
+					this.toDoList = response.data;
+				})
+				.catch((error) => {
+					console.error(error);
+				});
 		},
 		clearList() {
 			this.toDoList.splice(0);
