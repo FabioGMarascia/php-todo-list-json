@@ -9,16 +9,28 @@ createApp({
 			myIconStyle: `d-inline-block position-absolute end-0 mt-2 text-danger fs-3`,
 			taskDone: `text-success text-decoration-line-through`,
 			ongoingTask: `text-danger`,
-			apiUrl: "../list.php",
+			apiListUrl: "../list.php",
+			apiCreateUrl: "../create.php",
+			config: { headers: { "Content-Type": "multipart/form-data" } },
 		};
 	},
 	methods: {
 		addItem(text) {
 			if (!this.input == ``) {
-				this.toDoList.push({
+				const toDo = {
 					string: text,
 					done: false,
-				});
+				};
+
+				axios
+					.post(this.apiCreateUrl, toDo, this.config)
+					.then((response) => {
+						this.toDoList = response.data;
+					})
+					.catch((error) => {
+						console.error(error);
+					});
+
 				this.input = ``;
 			}
 		},
@@ -38,7 +50,7 @@ createApp({
 	mounted() {
 		const options = {
 			method: "GET",
-			url: this.apiUrl,
+			url: this.apiListUrl,
 		};
 
 		axios
@@ -46,7 +58,7 @@ createApp({
 			.then((response) => {
 				this.toDoList = response.data;
 			})
-			.catch(function (error) {
+			.catch((error) => {
 				console.error(error);
 			});
 	},
