@@ -38,11 +38,11 @@
 								<ol class="list-group">
 									<li
 										v-for="toDo, i in toDoList"
-										class="fw-bold fs-5 list-group-item row py-0 mx-0"
-										:class="done(toDo)">
+										class="fw-bold fs-5 list-group-item row py-0 mx-0">
 										<div
 											class="col-10 d-inline-block py-2 text-break"
-											@click="changeToDo(toDo)">
+											@click="changeToDo(toDo)"
+											:class="done(toDo)">
 											{{toDo.string}}
 										</div>
 										<span class="col-1 text-center px-0">
@@ -75,6 +75,6 @@
 				</div>
 			</div>
 		</div>
-		<script type="text/javascript" src="./script.js"></script>
+		<script type="text/javascript" src="./main.js"></script>
 	</body>
 </html>
