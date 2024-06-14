@@ -9,6 +9,7 @@ createApp({
 			myIconStyle: `d-inline-block position-absolute end-0 mt-2 text-danger fs-3`,
 			taskDone: `text-success text-decoration-line-through`,
 			ongoingTask: `text-danger`,
+			apiUrl: "../api.php",
 			apiListUrl: "../list.php",
 			apiCreateUrl: "../create.php",
 			apiDeleteUrl: "../delete.php",
@@ -20,11 +21,12 @@ createApp({
 		addItem(text) {
 			if (!this.input == ``) {
 				const toDo = {
-					string: text,
+					element: text,
+					type: "add",
 				};
 
 				axios
-					.post(this.apiCreateUrl, toDo, this.config)
+					.post(this.apiUrl, toDo, this.config)
 					.then((response) => {
 						this.toDoList = response.data;
 					})
@@ -38,10 +40,11 @@ createApp({
 		deleteItem(index) {
 			const toDo = {
 				element: index,
+				type: "delete",
 			};
 
 			axios
-				.post(this.apiDeleteUrl, toDo, this.config)
+				.post(this.apiUrl, toDo, this.config)
 				.then((response) => {
 					this.toDoList = response.data;
 				})
@@ -52,14 +55,14 @@ createApp({
 		done(element) {
 			return element.done ? this.taskDone : this.ongoingTask;
 		},
-		changeToDo(element, index) {
-			// element.done ? (element.done = false) : (element.done = true);
+		changeToDo(index) {
 			const toDo = {
 				element: index,
+				type: "update",
 			};
 
 			axios
-				.post(this.apiUpdateUrl, toDo, this.config)
+				.post(this.apiUrl, toDo, this.config)
 				.then((response) => {
 					this.toDoList = response.data;
 				})
@@ -68,13 +71,24 @@ createApp({
 				});
 		},
 		clearList() {
-			this.toDoList.splice(0);
+			const toDo = {
+				type: "clear",
+			};
+
+			axios
+				.post(this.apiUrl, toDo, this.config)
+				.then((response) => {
+					this.toDoList = response.data;
+				})
+				.catch((error) => {
+					console.error(error);
+				});
 		},
 	},
 	mounted() {
 		const options = {
 			method: "GET",
-			url: this.apiListUrl,
+			url: this.apiUrl,
 		};
 
 		axios
